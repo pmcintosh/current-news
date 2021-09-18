@@ -64,18 +64,18 @@ const scripts = [
   "theverge.js",
 ];
 scripts.forEach((s) => {
-  runScript(`src/scripts/${s}`, function (err) {
+  runScript(`./src/scripts/${s}`, function (err) {
     if (err) throw err;
     console.log(`finished running ${s}`);
   });
 });
 
-let data = loadFile("src/scripts/output/14news.json");
-data = data.concat(loadFile("src/scripts/output/github.json"));
-data = data.concat(loadFile("src/scripts/output/hackernews.json"));
-data = data.concat(loadFile("src/scripts/output/reddit.json"));
-data = data.concat(loadFile("src/scripts/output/slashdot.json"));
-data = data.concat(loadFile("src/scripts/output/verge.json"));
+let data = loadFile("./src/scripts/output/14news.json");
+data = data.concat(loadFile("./src/scripts/output/github.json"));
+data = data.concat(loadFile("./src/scripts/output/hackernews.json"));
+data = data.concat(loadFile("./src/scripts/output/reddit.json"));
+data = data.concat(loadFile("./src/scripts/output/slashdot.json"));
+data = data.concat(loadFile("./src/scripts/output/verge.json"));
 data = groupBy(data, "link");
 
 let moreThanOne = [];

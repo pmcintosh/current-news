@@ -41,7 +41,10 @@ export default () => (
       <section>
         <p>Source can be found here:</p>
         <div className="news-button-container">
-          <a className="news-button block" href="">
+          <a
+            className="news-button block"
+            href="https://github.com/pmcintosh/current-news"
+          >
             Github
           </a>
         </div>
@@ -51,7 +54,10 @@ export default () => (
 
       <section>
         Have questions or spot an issue?:{" "}
-        <a className="news-button block accent" href="">
+        <a
+          className="news-button block accent"
+          href="https://github.com/pmcintosh/current-news/issues"
+        >
           Report an issue here!
         </a>
       </section>

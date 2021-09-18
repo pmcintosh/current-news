@@ -55,6 +55,7 @@ h1 {
   display: flex;
   flex-direction: column;
   align-items: center;
+  max-width: 100vw;
 }
 
 .news-header-container {
@@ -86,10 +87,16 @@ h1 {
   align-items: center;
 }
 
+.about .card.block {
+  padding: 1rem;
+  min-width: 20rem;
+}
+
 .about section {
-  margin: 1rem;
+  margin: 1rem 0.5rem 1rem 0.5rem;
 }
 
 .about .description {
-  width: 50rem;
+  font-size: 100%;
+  max-width: 50rem;
 }

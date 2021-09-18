@@ -85,7 +85,9 @@ const items = keys.map((k) => {
     favicon: getFavicon(k),
     title: data[k][0].title,
     link: k,
-    discuss: data[k].map((s) => s.discuss ?? "").filter((s) => s !== ""),
+    discuss: data[k]
+      .map((s) => (s.discuss ? s.discuss : ""))
+      .filter((s) => s !== ""),
     tags: data[k]
       .map((s) => {
         const url = s.discuss ? new URL(s.discuss) : new URL(s.link);

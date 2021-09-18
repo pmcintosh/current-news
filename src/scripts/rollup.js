@@ -61,15 +61,25 @@ async function main() {
     "theverge.js",
   ];
 
+  const outputs = [
+    "14news.json",
+    "github.json",
+    "hackernews.json",
+    "reddit.json",
+    "slashdot.json",
+    "verge.json",
+  ];
+
   const promises = scripts.map((s) => runScript(path.join(__dirname, s)));
   await Promise.all(promises);
 
-  let data = loadFile(path.join(__dirname, "/output/14news.json"));
-  data = data.concat(loadFile(path.join(__dirname, "/output/github.json")));
-  data = data.concat(loadFile(path.join(__dirname, "/output/hackernews.json")));
-  data = data.concat(loadFile(path.join(__dirname, "/output/reddit.json")));
-  data = data.concat(loadFile(path.join(__dirname, "/output/slashdot.json")));
-  data = data.concat(loadFile(path.join(__dirname, "/output/verge.json")));
+  let data = [];
+  outputs.forEach((o) => {
+    const p = path.join(__dirname, `/output/${o}`);
+    if (fs.existsSync(p)) data = data.concat(loadFile(p));
+    else console.log(`Could not load ${o}`);
+  });
+
   data = groupBy(data, "link");
 
   let moreThanOne = [];

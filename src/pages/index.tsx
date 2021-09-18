@@ -31,6 +31,7 @@ export default () => {
   return (
     <div style={{ textAlign: "center" }}>
       <h1>Current News</h1>
+      <p>Last published {new Date(data.published).toLocaleTimeString()}</p>
 
       <Tags tags={data.tags} active={tag} onClick={(t) => setTag(t)} />
 

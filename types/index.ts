@@ -7,6 +7,7 @@ export interface News {
 }
 
 export interface NewsData {
+  published: Date;
   tags: string[];
   news: News[];
 }

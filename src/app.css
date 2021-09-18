@@ -10,6 +10,8 @@ body {
   --block-text-color: #14213d;
   --block-background-color: #e5e5e5;
   --block-accent-color: #fca311;
+  height: 100%;
+  width: 100%;
 }
 
 a {
@@ -57,17 +59,21 @@ h1 {
 
 .news-header-container {
   display: flex;
-  flex-direction: row;
+  flex-flow: row wrap;
   justify-content: space-between;
 }
 
+.news-header {
+  font-size: 100%;
+}
+
 .news-header img {
-  margin-right: 2rem;
+  margin-right: 1rem;
 }
 
 .news-button-container {
   display: flex;
-  flex-direction: row;
+  flex-flow: row wrap;
 }
 
 .news-button {

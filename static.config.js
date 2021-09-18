@@ -8,7 +8,9 @@ import fs from "fs";
 export default {
   entry: path.join(__dirname, "src", "index.tsx"),
   getSiteData: async () => {
-    const json = fs.readFileSync("src/scripts/output/news.json");
+    const json = fs.readFileSync(
+      path.join(__dirname, "/src/scripts/output/news.json")
+    );
     const data = JSON.parse(json);
     console.log("data loaded");
     return data;

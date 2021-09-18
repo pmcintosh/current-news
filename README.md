@@ -1,21 +1,6 @@
-# React-Static - TypeScript Template
+# Current News
 
-To use this template, run `react-static create` and use the `typescript` template.
+A small static site build with react-static, x-ray, and blocks.css.
+This scrapes a few sites I routinely visit for news and rolls-up the links to reduce duplicates.
 
-## Path Aliases for Absolute Imports
-
-`react-static-typescript-plugin` supports path aliases [since v3.1](https://github.com/react-static/react-static/pull/963#issuecomment-455596728). It has been set up in this template.
-
-```js
-// tsconfig.json
-{
-  // ...
-    "paths": {
-      "@components/*": ["src/components/*"]
-    },
-  // ...
-}
-
-// this works in your React app
-import FancyDiv from '@components/FancyDiv'
-```
+It isn't super pretty, but it gets the job done.

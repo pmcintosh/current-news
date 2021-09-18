@@ -1,24 +1,17 @@
 const fs = require("fs");
+const path = require("path");
 const childProcess = require("child_process");
 
-function runScript(scriptPath, callback) {
-  // keep track of whether callback has been invoked to prevent multiple invocations
-  var invoked = false;
-  var process = childProcess.fork(scriptPath);
-
-  // listen for errors as they may prevent the exit event from firing
-  process.on("error", function (err) {
-    if (invoked) return;
-    invoked = true;
-    callback(err);
-  });
-
-  // execute the callback once the process has finished running
-  process.on("exit", function (code) {
-    if (invoked) return;
-    invoked = true;
-    var err = code === 0 ? null : new Error("exit code " + code);
-    callback(err);
+function runScript(scriptPath) {
+  return new Promise((resolve, reject) => {
+    childProcess.exec(`node ${scriptPath}`, (err, stdout) => {
+      if (err) {
+        console.log(`script failed: ${scriptPath}`);
+        reject(err);
+      } else {
+        resolve(stdout);
+      }
+    });
   });
 }
 
@@ -54,68 +47,74 @@ function getFavicon(link) {
   }
 }
 
-// Now we can run a script and invoke a callback when complete, e.g.
-const scripts = [
-  "14news.js",
-  "github.js",
-  "hackernews.js",
-  "reddit.js",
-  "slashdot.js",
-  "theverge.js",
-];
-scripts.forEach((s) => {
-  runScript(`./src/scripts/${s}`, function (err) {
-    if (err) throw err;
-    console.log(`finished running ${s}`);
+async function main() {
+  if (!fs.existsSync(path.join(__dirname, "/output")))
+    fs.mkdirSync(path.join(__dirname, "/output"));
+
+  // Now we can run a script and invoke a callback when complete, e.g.
+  const scripts = [
+    "14news.js",
+    "github.js",
+    "hackernews.js",
+    "reddit.js",
+    "slashdot.js",
+    "theverge.js",
+  ];
+
+  const promises = scripts.map((s) => runScript(path.join(__dirname, s)));
+  await Promise.all(promises);
+
+  let data = loadFile(path.join(__dirname, "/output/14news.json"));
+  data = data.concat(loadFile(path.join(__dirname, "/output/github.json")));
+  data = data.concat(loadFile(path.join(__dirname, "/output/hackernews.json")));
+  data = data.concat(loadFile(path.join(__dirname, "/output/reddit.json")));
+  data = data.concat(loadFile(path.join(__dirname, "/output/slashdot.json")));
+  data = data.concat(loadFile(path.join(__dirname, "/output/verge.json")));
+  data = groupBy(data, "link");
+
+  let moreThanOne = [];
+  const keys = Object.keys(data);
+  const items = keys.map((k) => {
+    const o = {
+      favicon: getFavicon(k),
+      title: data[k][0].title,
+      link: k,
+      discuss: data[k]
+        .map((s) => (s.discuss ? s.discuss : ""))
+        .filter((s) => s !== ""),
+      tags: data[k]
+        .map((s) => {
+          const url = s.discuss ? new URL(s.discuss) : new URL(s.link);
+          const hostname = url.hostname;
+          let tag = "";
+          tag = hostname.toString().includes("ycombinator")
+            ? "hackernews"
+            : tag;
+          tag = hostname.toString().includes("14news") ? "14news" : tag;
+          tag = hostname.toString().includes("slashdot") ? "slashdot" : tag;
+          tag = hostname.toString().includes("github") ? "github" : tag;
+          tag = hostname.toString().includes("theverge") ? "verge" : tag;
+          tag = hostname.toString().includes("reddit") ? "reddit" : tag;
+          return tag;
+        })
+        .join(","),
+    };
+
+    return o;
   });
-});
 
-let data = loadFile("./src/scripts/output/14news.json");
-data = data.concat(loadFile("./src/scripts/output/github.json"));
-data = data.concat(loadFile("./src/scripts/output/hackernews.json"));
-data = data.concat(loadFile("./src/scripts/output/reddit.json"));
-data = data.concat(loadFile("./src/scripts/output/slashdot.json"));
-data = data.concat(loadFile("./src/scripts/output/verge.json"));
-data = groupBy(data, "link");
-
-let moreThanOne = [];
-const keys = Object.keys(data);
-const items = keys.map((k) => {
-  const o = {
-    favicon: getFavicon(k),
-    title: data[k][0].title,
-    link: k,
-    discuss: data[k]
-      .map((s) => (s.discuss ? s.discuss : ""))
-      .filter((s) => s !== ""),
-    tags: data[k]
-      .map((s) => {
-        const url = s.discuss ? new URL(s.discuss) : new URL(s.link);
-        const hostname = url.hostname;
-        let tag = "";
-        tag = hostname.toString().includes("ycombinator") ? "hackernews" : tag;
-        tag = hostname.toString().includes("14news") ? "14news" : tag;
-        tag = hostname.toString().includes("slashdot") ? "slashdot" : tag;
-        tag = hostname.toString().includes("github") ? "github" : tag;
-        tag = hostname.toString().includes("theverge") ? "verge" : tag;
-        tag = hostname.toString().includes("reddit") ? "reddit" : tag;
-        return tag;
-      })
-      .join(","),
+  const output = {
+    published: new Date(),
+    tags: ["14news", "slashdot", "github", "verge", "reddit", "hackernews"],
+    items: items,
   };
 
-  return o;
-});
-
-const output = {
-  published: new Date(),
-  tags: ["14news", "slashdot", "github", "verge", "reddit", "hackernews"],
-  items: items,
-};
-
-const json = JSON.stringify(output, null, 4);
-try {
-  fs.writeFileSync("src/scripts/output/news.json", json);
-} catch (err) {
-  console.log(err);
+  const json = JSON.stringify(output, null, 4);
+  try {
+    fs.writeFileSync("src/scripts/output/news.json", json);
+  } catch (err) {
+    console.log(err);
+  }
 }
+
+main();

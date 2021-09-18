@@ -1,6 +1,7 @@
-var fs = require("fs");
-var Xray = require("x-ray");
-var x = Xray();
+const path = require("path");
+const fs = require("fs");
+const Xray = require("x-ray");
+const x = Xray();
 
 function cleanup(title) {
   const temp = title.replaceAll("\n", "").trim();
@@ -18,7 +19,7 @@ x("https://github.com/trending", "h1.h3.lh-condensed", [
 ]).then(function (res) {
   const items = res.map((i) => ({ ...i, title: cleanup(i.title) }));
   const json = JSON.stringify(items, null, 4);
-  fs.writeFile("src/scripts/output/github.json", json, (err) => {
+  fs.writeFile(path.join(__dirname, "/output/github.json"), json, (err) => {
     if (err) console.log(err);
   });
 });

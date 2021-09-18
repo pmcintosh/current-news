@@ -1,6 +1,7 @@
-var fs = require("fs");
-var Xray = require("x-ray");
-var x = Xray();
+const path = require("path");
+const fs = require("fs");
+const Xray = require("x-ray");
+const x = Xray();
 
 x("https://news.ycombinator.com/", ".athing", [
   {
@@ -14,7 +15,7 @@ x("https://news.ycombinator.com/", ".athing", [
     discuss: `https://news.ycombinator.com/item?id=${i.discuss}`,
   }));
   const json = JSON.stringify(items, null, 4);
-  fs.writeFile("src/scripts/output/hackernews.json", json, (err) => {
+  fs.writeFile(path.join(__dirname, "/output/hackernews.json"), json, (err) => {
     if (err) console.log(err);
   });
 });

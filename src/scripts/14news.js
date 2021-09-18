@@ -1,9 +1,10 @@
-var Xray = require("x-ray");
-var x = Xray();
+const path = require("path");
+const Xray = require("x-ray");
+const x = Xray();
 
 x("https://www.14news.com", "h4.headline", [
   {
     title: "a@text",
     link: "a@href",
   },
-]).write("src/scripts/output/14news.json");
+]).write(path.join(__dirname, "/output/14news.json"));

@@ -1,3 +1,4 @@
+const path = require("path");
 const axios = require("axios");
 const fs = require("fs");
 
@@ -13,7 +14,7 @@ const fetch = async () => {
   }));
 
   const json = JSON.stringify(items, null, 4);
-  fs.writeFile("src/scripts/output/reddit.json", json, (err) => {
+  fs.writeFile(path.join(__dirname, "/output/reddit.json"), json, (err) => {
     if (err) console.log(err);
   });
 };

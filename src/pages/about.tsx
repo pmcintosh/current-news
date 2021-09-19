@@ -21,7 +21,7 @@ export default () => (
             className="block news-button"
             href="https://github.com/react-static/react-static"
           >
-            reac-static
+            react-static
           </a>
           <a
             className="block news-button"

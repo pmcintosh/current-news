@@ -3,10 +3,10 @@ const fs = require("fs");
 const Xray = require("x-ray");
 const x = Xray();
 
-x("https://news.ycombinator.com/", ".athing", [
+x("https://news.ycombinator.com/", ".title", [
   {
-    title: ".storylink@text",
-    link: ".storylink@href",
+    title: ".titlelink@text",
+    link: ".titlelink@href",
     discuss: "@id",
   },
 ]).then(function (res) {

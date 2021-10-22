@@ -10,8 +10,8 @@ body {
   --block-text-color: #14213d;
   --block-background-color: #e5e5e5;
   --block-accent-color: #fca311;
-  height: 100%;
-  width: 100%;
+  height: 100vh;
+  width: 100vw;
 }
 
 a {

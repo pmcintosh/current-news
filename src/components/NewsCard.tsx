@@ -6,7 +6,7 @@ export interface Props {
 }
 
 const NewsCard = ({ news }: Props) => (
-  <div className="card block">
+  <div className="card block fixed">
     <div className="news-header-container">
       <h2 className="news-header">
         <img src={news.favicon} alt="favicon" />

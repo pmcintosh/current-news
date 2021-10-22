@@ -1,3 +1,7 @@
+html {
+  background-color: #000000;
+}
+
 body {
   font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue",
     Helvetica, Arial, "Lucida Grande", sans-serif;
@@ -6,12 +10,11 @@ body {
   margin: 0;
   padding: 0;
   color: #e5e5e5;
-  background-color: #000000;
   --block-text-color: #14213d;
   --block-background-color: #e5e5e5;
   --block-accent-color: #fca311;
-  height: 100vh;
-  width: 100vw;
+  height: 100%;
+  width: 100%;
 }
 
 a {
